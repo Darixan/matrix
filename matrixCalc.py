@@ -30,6 +30,11 @@ def loadB():
                 for j in range(0,len(data[0])):
                     data[i][j] = int(data[i][j])
 	    return data
+
+def transpose(matrix):
+    newMatrix = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+    return newMatrix
+
 def cofactor(matrix, i, j):
     return [row[:j] + row[j+1:] for row in (matrix[:i] + matrix[i+1:])]
 
@@ -93,3 +98,5 @@ print(length)
 det = determinant(aData)
 adjointA = adjoint(aData)
 print(np.matrix(adjointA))
+aTranspose = transpose(aData)
+print(np.matrix(aTranspose))
