@@ -95,7 +95,91 @@ def adjoint(matrix):
 
     return adj
 
+def inverse(matrix):
+    det = determinant(matrix)
 
+    adj = adjoint(matrix)
+    inverse = [[None] * len(matrix) for _ in range(len(matrix))] 
+    for i in range(len(adj)):
+        for j in range(len(adj)):
+            inverse[i][j] = adj[i][j]/float(det)
+    return inverse
+
+def constMult(matrix, n):
+    result = [[None] * len(matrix) for _ in range(len(matrix))]
+    
+    for i in range(len(result)):
+        for j in range(len(result)):
+            result[i][j] = matrix[i][j] * n
+    return result
+
+def matrixPower(matrix, power):
+    if(power == 1):
+        return matrix
+
+    powerMatrix = [[None] * len(matrix) for _ in range(len(matrix))]
+    powerMatrix = matrixMult(matrix, matrix)
+
+    for _ in range(0, power-2):
+        powerMatrix = matrixMult(matrix, powerMatrix)
+
+    return powerMatrix
+
+def toIdentity(size):
+    if(size == 1):
+        return [1]
+
+    identity = [[0 for i in range(size)] for j in range(size)]
+
+    for i in range(len(identity)):
+        for j in range(len(identity)):
+            if(i == j):
+                identity[i][j] = 1
+    return identity
+
+def toIdentityA(size):
+    global aData
+    aData = toIdentity(size)
+    return
+
+def toIdentityB(size):
+    global bData
+    bData = toIdentity(size)
+    return
+
+def addMatrix(matrix1, matrix2):
+    addedMat = [[0 for i in range(len(matrix1))] for j in range(len(matrix1))]
+    for i in range(len(matrix1)):
+        for j in range(len(matrix1)):
+            addedMat[i][j] = matrix1[i][j] + matrix2[i][j]
+    return addedMat
+
+def subMatrix(matrix1, matrix2):
+    subbedMat = [[0 for i in range(len(matrix1))] for j in range(len(matrix1))]
+    for i in range(len(matrix1)):
+        for j in range(len(matrix1)):
+            subbedMat[i][j] = matrix1[i][j] - matrix2[i][j]
+    return subbedMat
+
+def copyAtoB():
+    global aData
+    global bData
+    bData = aData
+    return
+
+def copyBtoA():
+    global aData
+    global bData
+    aData = bData
+    return
+
+def swapAandB():
+    global aData
+    global bData
+    temp  = bData
+    bData = aData
+    aData = temp
+    return
 aData = loadA()
 bData = loadB()
 
@@ -109,5 +193,21 @@ print(np.matrix(adjointA))
 aTranspose = transpose(aData)
 print(np.matrix(aTranspose))
 
-aDataSqu = matrixMult(aData, aData)
-print(np.matrix(aDataSqu))
+aDataInv = inverse(aData)
+print(np.matrix(aDataInv))
+
+aDataPower = (matrixPower(aData, 4))
+print(np.matrix(aDataPower))
+
+identity = toIdentity(4)
+print(np.matrix(identity))
+
+
+addMat = subMatrix(aData, identity)
+print(np.matrix(addMat))
+
+copyAtoB()
+print(np.matrix(bData))
+
+result = constMult(bData, 4)
+print(np.matrix(result))
