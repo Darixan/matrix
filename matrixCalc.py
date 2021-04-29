@@ -31,6 +31,14 @@ def loadB():
                     data[i][j] = int(data[i][j])
 	    return data
 
+def matrixMult(matrix1, matrix2):
+    result = [[0 for col in range(len(matrix2[0]))] for rows in range(len(matrix1))] 
+    for i in range(len(matrix1)):
+        for j in range(len(matrix2[0])):
+            for k in range(len(matrix2)):
+                result[i][j] += matrix1[i][k] * matrix2[k][j]
+    return result
+
 def transpose(matrix):
     newMatrix = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
     return newMatrix
@@ -100,3 +108,6 @@ adjointA = adjoint(aData)
 print(np.matrix(adjointA))
 aTranspose = transpose(aData)
 print(np.matrix(aTranspose))
+
+aDataSqu = matrixMult(aData, aData)
+print(np.matrix(aDataSqu))
