@@ -15,7 +15,11 @@ def loadA():
     		data.append(row)
             for i in range(0,len(data)):
                 for j in range(0, len(data[0])):
-                    data[i][j] = int(data[i][j])
+                    try:
+                        data[i][j] = int(data[i][j])
+                    except ValueError:
+                        print("\n ERROR: trying to load a non integer into matrix")
+                        return [None]
 	    return data
 
 	
@@ -28,7 +32,10 @@ def loadB():
 	    	data.append(row)
             for i in range(0,len(data)):
                 for j in range(0,len(data[0])):
-                    data[i][j] = int(data[i][j])
+                    try:
+                        data[i][j] = int(data[i][j])
+                    except ValueError:
+                        print("\n ERROR: trying to load a non integer into matrix")
 	    return data
 
 def matrixMult(matrix1, matrix2):
@@ -180,34 +187,51 @@ def swapAandB():
     bData = aData
     aData = temp
     return
-aData = loadA()
-bData = loadB()
-
-print(np.matrix(aData))
-print(np.matrix(bData))
-length = len(aData)
-print(length)
-det = determinant(aData)
-adjointA = adjoint(aData)
-print(np.matrix(adjointA))
-aTranspose = transpose(aData)
-print(np.matrix(aTranspose))
-
-aDataInv = inverse(aData)
-print(np.matrix(aDataInv))
-
-aDataPower = (matrixPower(aData, 4))
-print(np.matrix(aDataPower))
-
-identity = toIdentity(4)
-print(np.matrix(identity))
 
 
-addMat = subMatrix(aData, identity)
-print(np.matrix(addMat))
+inp = 3000
 
-copyAtoB()
-print(np.matrix(bData))
+while inp != 0:
+    print("\nMATRIX CALCULATOR")
+    print("1. Load A")
+    print("2. Load B")
+    print("3. Make A a square identity matrix: A to I")
+    print("4. Make B a square identity matrix: B to I")
+    print("5. A times n (will be prompted for n)")
+    print("6. B times n (will be prompted for n)")
+    print("7. Determinant of A")
+    print("8. Determinant of B")
+    print("9. Transpose A")
+    print("10. Transpose B")
+    print("11. Inverse of A")
+    print("12. Inverse of B")
+    print("13. A + B")
+    print("14. B - A")
+    print("15. A - B")
+    print("16. A * B")
+    print("17. B * A")
+    print("18. B = A")
+    print("19. A = B")
+    print("20. Swap A and B")
+    print("0. Exit Calculator")
+    
+    try:
+        inp = int(input("\nSelect your choice: "))
+    except:
+        print("\n ERROR: The value inputted must be a number, nothing else!")
+        inp = 3000
 
-result = constMult(bData, 4)
-print(np.matrix(result))
+    if(inp == 1):
+        try:
+            aData = loadA()
+            print("A: ")
+            print(np.matrix(aData))
+        except:
+            print("No A.csv file is in directory")
+    elif(inp == 2):
+        bData = loadB()
+        print("B: ")
+        print(np.matrix(bData))
+
+    
+
