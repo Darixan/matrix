@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 """
-
+Written By: Terry Watson
+CMPS 3500
+Project: Matrix Calculator
+Description: Used in pair with A.csv and B.csv to perform calculations on the contained
+matrices
 """
 import csv
 import io
@@ -213,6 +217,8 @@ while inp != 0:
     print("18. B = A")
     print("19. A = B")
     print("20. Swap A and B")
+    print("21. Print A")
+    print("22. Print B")
     print("0. Exit Calculator")
     
     try:
@@ -232,6 +238,186 @@ while inp != 0:
         bData = loadB()
         print("B: ")
         print(np.matrix(bData))
+    elif(inp == 3):
+        if('aData' in globals()):
+            if(len(aData[0]) == len(aData)):
+                toIdentityA(len(aData))
+                print("A is now: ")
+                print(np.matrix(aData))
+            else:
+                print("A is not a square matrix!")
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 4):
+        if('bData' in globals()):
+            if(len(bData[0]) == len(bData)):
+                toIdentityB(len(bData))
+                print("B is now: ")
+                print(np.matrix(bData))
+            else:
+                print("B is not a square matrix!")
+        else:
+            print("Matrix B does not exist, try loading it!")
+    elif(inp == 5):
+        if('aData' in globals()):
+            try:
+                n = int(input("Please input a value for integer n to multiply by: "))
+                result = constMult(aData, n)
+                print("Result: ")
+                print(np.matrix(result))
+                choice = raw_input("Would you like to store result to A? (Y for yes, anything else for no): ")
+                if(choice == "Y"):
+                    aData = result
+            except:
+                print ("Please input a valid integer!")
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 6):
+        if('bData' in globals()):
+            try:
+                n = int(input("Please input a value for integer n to multiply by: "))
+                result = constMult(bData, n)
+                print("Result: ")
+                print(np.matrix(result))
+                choice = raw_input("Would you like to store result to B? (Y for yes, anything else for no): ")
+                if(choice == "Y"):
+                    bData = result
+            except:
+                print ("Please input a valid integer!")
+        else:
+            print("Matrix B does not exist, try loading it!")
+    elif(inp == 7):
+        if('aData' in globals()):
+            if(len(aData[0]) == len(aData)):
+                det = determinant(aData)
+                print("The determinant is: " + str(det))
+            else:
+                print("A must be a square matrix!")
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 8):
+        if('bData' in globals()):
+            if(len(bData[0]) == len(bData)):
+                det = determinant(bData)
+                print("The determinant is: " + str(det))
+            else:
+                print("B must be a square matrix!")
+        else:
+            print("Matrix B does not exist, try loading it!")
+    elif(inp == 9):
+        if('aData' in globals()):
+            result = transpose(aData)
+            print("Transposed matrix: ")
+            print(np.matrix(result))
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 10):
+        if('bData' in globals()):
+            result = transpose(bData)
+            print("Transposed matrix: ")
+            print(np.matrix(result))
+        else:
+            print("Matrix B does not exist, try loading it!")
+    elif(inp == 11):
+        if('aData' in globals()):
+            if(len(aData[0]) == len(aData)):
+                inv = inverse(aData)
+                print("The invere matrix for A is: ")
+                print(np.matrix(inv))
+            else:
+                print("A must be a square matrix!")
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 12):
+        if('bData' in globals()):
+            if(len(bData[0]) == len(bData)):
+                inv = inverse(bData)
+                print("The invere matrix for B is: ")
+                print(np.matrix(inv))
+            else:
+                print("B must be a square matrix!")
+        else:
+            print("Matrix B does not exist, try loading it!")
+    elif(inp == 13):
+        if('aData' in globals()) and ('bData' in globals()):
+            if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
+                result = addMatrix(aData, bData) 
+                print("The added matrix is: ")
+                print(np.matrix(result))
+            else:
+                print("A and B must be the same size.")
+        else:
+            print("Matrix A or B does not exist, try loading it!")
+    elif(inp == 14):
+        if('aData' in globals()) and ('bData' in globals()):
+            if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
+                result = subMatrix(bData, aData)
+                print("The subtracted matrix B-A is: ")
+                print(np.matrix(result))
+            else:
+                print("A and B must be the same size.")
+        else:
+            print("Matrix A or B does not exist, try loading it!")
+    elif(inp == 15):
+        if('aData' in globals()) and ('bData' in globals()):
+            if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
+                result = subMatrix(aData, bData)
+                print("The subtracted matrix A-B is: ")
+                print(np.matrix(result))
+            else:
+                print("A and B must be the same size.")
+        else:
+            print("Matrix A or B does not exist, try loading it!")
+    elif(inp == 16):
+        if('aData' in globals()) and ('bData' in globals()):
+            if(len(aData[0]) == len(bData)):
+                result = matrixMult(aData, bData)
+                print("A * B is: ")
+                print(np.matrix(result))
+            else:
+                print("A's columns must equal B's rows!")
+        else:
+            print("Matrix A or B does not exist, try loading it!")
+    elif(inp == 17):
+        if('aData' in globals()) and ('bData' in globals()):
+            if(len(bData[0]) == len(aData)):
+                result = matrixMult(bData, aData)
+                print("B * A is: ")
+                print(np.matrix(result))
+            else:
+                print("B's columns must equal A's rows!")
+        else:
+            print("Matrix A or B does not exist, try loading it!")
+    elif(inp == 18):
+        if('aData' in globals()):
+            copyAtoB()
+            print("B: ")
+            print(np.matrix(bData))
+        else:
+            print("A matrix does not exist! Cannot copy to B!")
+    elif(inp == 19):
+        if('bData' in globals()):
+            copyBtoA()
+            print("A: ")
+            print(np.matrix(bData))
+        else:
+            print("B matrix does not exist! Cannot copy to A!")
+    elif(inp == 20):
+        if('aData' in globals()) and ('bData' in globals()):
+            swapAandB()
+        else:
+            print("Either A or B does not exist!")
+    elif(inp == 21):
+        if('aData' in globals()):
+            print("A matrix is: ")
+            print(np.matrix(aData))
+        else:
+            print("Nothing in matrix A, try loading it!")
+    elif(inp == 22):
+        if('bData' in globals()):
+            print("B matrix is: ")
+            print(np.matrix(bData))
+        else:
+            print("Nothing in matrix B, try loading it!")
 
-    
 
