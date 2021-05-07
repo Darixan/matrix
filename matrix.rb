@@ -62,6 +62,23 @@ def addMatrix(matrix1, matrix2)
 end
 
 def subMatrix(matrix1, matrix2)
+    row = matrix1[0].length
+    col = matrix1.length
+    matrix3 = Array.new(col){Array.new(row)}
+    
+    i = 0
+    j = 0
+
+    matrix1.each do |m1Row|
+        m1Row.each do |m1Col|
+            matrix3[i][j] = m1Col - matrix2[i][j]
+            j = j + 1
+        end
+        i = i + 1
+        j = 0
+    end
+
+    return matrix3
 
 end
 
@@ -127,6 +144,12 @@ while true
             print matrixB
         when 13
             matrixC = addMatrix(matrixA, matrixB) 
+            print matrixC
+        when 14
+            matrixC = subMatrix(matrixB, matrixA)
+            print matrixC
+        when 15
+            matrixC = subMatrix(matrixA, matrixB)
             print matrixC
         when 21
             print matrixA
