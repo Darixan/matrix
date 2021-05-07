@@ -229,15 +229,26 @@ while inp != 0:
 
     if(inp == 1):
         try:
-            aData = loadA()
-            print("A: ")
-            print(np.matrix(aData))
+            temp = loadA()
+            if(len(temp) > 10 or len(temp[0]) > 10):
+                print("Can only load matrices up to size 10x10!")
+            else:
+                aData = temp
+                print("A: ")
+                print(np.matrix(aData))
         except:
             print("No A.csv file is in directory")
     elif(inp == 2):
-        bData = loadB()
-        print("B: ")
-        print(np.matrix(bData))
+        try:
+            temp = loadB()
+            if(len(temp) > 10 or len(temp[0]) > 10):
+                print("Can only load matrices up to size 10x10!")
+            else:
+                bData = temp
+                print("B: ")
+                print(np.matrix(bData))
+        except:
+            print("No A.csv file is in directory")
     elif(inp == 3):
         if('aData' in globals()):
             if(len(aData[0]) == len(aData)):
