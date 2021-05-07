@@ -42,7 +42,23 @@ end
 
 #binary operations
 def addMatrix(matrix1, matrix2)
+    row = matrix1[0].length
+    col = matrix1.length
+    matrix3 = Array.new(col){Array.new(row)}
+    
+    i = 0
+    j = 0
 
+    matrix1.each do |m1Row|
+        m1Row.each do |m1Col|
+            matrix3[i][j] = m1Col + matrix2[i][j]
+            j = j + 1
+        end
+        i = i + 1
+        j = 0
+    end
+
+    return matrix3
 end
 
 def subMatrix(matrix1, matrix2)
@@ -68,10 +84,35 @@ end
 def Menu()
     puts "\n\nCHOOSE AN OPTION:"
     puts "**********************************"
-    puts "1\tLoad Matrix A\n2\tLoad Matrix B\n0\tQuit\n\n"
+    puts "1\tLoad Matrix A\n"
+    puts "2\tLoad Matrix B\n"
+    puts "3\tMake A a square identity matrix: A to I\n"
+    puts "4\tMake B a square identity matrix: B to I\n"
+    puts "5\tA times n (will be prompted for n)\n"
+    puts "6\tB times n (will be prompted for n)\n"
+    puts "7\tDeterminant of A\n"
+    puts "8\tDeterminant of B\n"
+    puts "9\tTranspose A\n"
+    puts "10\tTranspose B\n"
+    puts "11\tInverse of A\n"
+    puts "12\tInverse of B\n"
+    puts "13\tA + B\n"
+    puts "14\tB - A\n"
+    puts "15\tA - B\n"
+    puts "16\tA * B\n"
+    puts "17\tB * A\n"
+    puts "18\tB = A\n"
+    puts "19\tA = B\n"
+    puts "20\tSwap A and B\n"
+    puts "21\tPrint A\n"
+    puts "22\tPrint B\n"
+    puts "0\tQuit\n\n"
 end
 
 #MAIN STARTS HERE
+matrixA = []
+matrixB = []
+matrixC = []
 while true
     Menu()
     choice = gets.chomp.to_i
@@ -83,6 +124,13 @@ while true
             print matrixA
         when 2
             matrixB = LoadB()
+            print matrixB
+        when 13
+            matrixC = addMatrix(matrixA, matrixB) 
+            print matrixC
+        when 21
+            print matrixA
+        when 22
             print matrixB
         else
             puts "INVALID INPUT"
