@@ -105,16 +105,18 @@ def multMatrix(matrix1, matrix2)
 
 end
 
-def Copy_AB()
-
+def Copy_A_to_B()
+    $matrixB = $matrixA
 end
 
-def Copy_BA()
-
+def Copy_B_to_A()
+    $matrixA = $matrixB
 end
 
-def Swap(matrix1, matrix2)
-
+def Swap()
+    tmp = $matrixA
+    $matrixA = $matrixB
+    $matrixB = tmp
 end
 
 def Menu()
@@ -146,9 +148,9 @@ def Menu()
 end
 
 #MAIN STARTS HERE
-matrixA = []
-matrixB = []
-matrixC = []
+$matrixA = []
+$matrixB = []
+$matrixC = []
 while true
     Menu()
     choice = gets.chomp.to_i
@@ -157,12 +159,12 @@ while true
             break
         
         when 1
-            matrixA = LoadA()
-            print matrixA
+            $matrixA = LoadA()
+            print $matrixA
         
         when 2
-            matrixB = LoadB()
-            print matrixB
+            $matrixB = LoadB()
+            print $matrixB
         
         when 5
             puts "Please enter a value for 'n': \n"
@@ -171,8 +173,8 @@ while true
                 puts "Please enter an INTEGER for 'n': \n"
                 inp = Integer(gets) rescue false
             end
-            matrixC = constMult(matrixA, inp)
-            print matrixC
+            $matrixC = constMult($matrixA, inp)
+            print $matrixC
             puts "\n"
             
             puts "Would you like to store the result of A? (Y/N)\n"
@@ -182,7 +184,7 @@ while true
                 inp = gets.chomp
             end
             if inp == "Y"
-                matrixA = matrixC
+                $matrixA = $matrixC
             end
         when 6
             puts "Please enter a value for 'n': \n"
@@ -191,8 +193,8 @@ while true
                 puts "Please enter an INTEGER for 'n': \n"
                 inp = Integer(gets) rescue false
             end
-            matrixC = constMult(matrixB, inp)
-            print matrixC
+            $matrixC = constMult($matrixB, inp)
+            print $matrixC
             puts "\n"
             
             puts "Would you like to store the result of B? (Y/N)\n"
@@ -202,26 +204,52 @@ while true
                 inp = gets.chomp
             end
             if inp == "Y"
-                matrixB = matrixC
+                $matrixB = $matrixC
             end
         
         when 13
-            matrixC = addMatrix(matrixA, matrixB) 
-            print matrixC
+            $matrixC = addMatrix($matrixA, $matrixB) 
+            print $matrixC
         
         when 14
-            matrixC = subMatrix(matrixB, matrixA)
-            print matrixC
+            $matrixC = subMatrix($matrixB, $matrixA)
+            print $matrixC
         
         when 15
-            matrixC = subMatrix(matrixA, matrixB)
-            print matrixC
-        
+            $matrixC = subMatrix($matrixA, $matrixB)
+            print $matrixC
+
+        when 18
+            Copy_A_to_B()
+            puts "Matrix A: \n"
+            print $matrixA
+            puts "\n"
+            puts "Matrix B: \n"
+            print $matrixB
+            puts "\n"
+
+        when 19
+            Copy_B_to_A()
+            puts "Matrix A: \n"
+            print $matrixA
+            puts "\n"
+            puts "Matrix B: \n"
+            print $matrixB
+            puts "\n"
+
+        when 20
+            Swap()
+            puts "Matrix A: \n"
+            print $matrixA
+            puts "\n"
+            puts "Matrix B: \n"
+            print $matrixB
+            puts "\n" 
+            
         when 21
-            print matrixA
-        
+            print $matrixA
         when 22
-            print matrixB
+            print $matrixB
         
         else
             puts "INVALID INPUT"
