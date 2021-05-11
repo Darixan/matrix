@@ -10,6 +10,10 @@ matrices
 import csv
 import io
 import numpy as np
+"""
+loadA() and loadB() are essentially the same function. They load their respective CSV files
+and do some error testing on the data to make sure it can be properly processed.
+"""
 def loadA():
 	file = 'A.csv'
         with io.open(file, 'r', encoding = 'utf-8-sig') as csvfile:
@@ -41,22 +45,34 @@ def loadB():
                     except ValueError:
                         print("\n ERROR: trying to load a non integer into matrix")
 	    return data
-
+"""
+matrixMult takes two matrices and find the multiplication of the two
+"""
 def matrixMult(matrix1, matrix2):
     result = [[0 for col in range(len(matrix2[0]))] for rows in range(len(matrix1))] 
+    #k is used to iterate through the entire column for each row
     for i in range(len(matrix1)):
         for j in range(len(matrix2[0])):
             for k in range(len(matrix2)):
                 result[i][j] += matrix1[i][k] * matrix2[k][j]
     return result
 
+"""
+transpose swaps a matrix along its diagonal from the top left to bottom right of the matrix
+"""
 def transpose(matrix):
     newMatrix = [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
     return newMatrix
 
+"""
+cofactor finds the submatrix of a given point at i, j
+"""
 def cofactor(matrix, i, j):
     return [row[:j] + row[j+1:] for row in (matrix[:i] + matrix[i+1:])]
-
+"""
+The above cofactor only works when working in a recursive way for determinant.
+This cofactor function can find the submatrix regardless of original point
+"""
 def cofactornorec(matrix, i, j):
     submat = [[None] * (len(matrix)-1) for x in range(len(matrix)-1)]
     subrow = 0
@@ -72,6 +88,9 @@ def cofactornorec(matrix, i, j):
                 
     return submat
 
+"""
+determinant recursively finds the scalar discriminant of a matrix with a base case of a 2x2 matrix
+"""
 def determinant(matrix):
     if(len(matrix) == 2):
         det = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
@@ -87,7 +106,9 @@ def determinant(matrix):
         detSum += (sign * matrix[0][currentColumn] * subDet)
 
     return detSum
-
+"""
+adjoint find the adjoin matrix of a given matrix. It uses the above determinant function to do so.
+"""
 def adjoint(matrix):
     adj = [[None]*len(matrix) for _ in range(len(matrix))]
     if(len(matrix) == 1):
@@ -106,6 +127,10 @@ def adjoint(matrix):
 
     return adj
 
+"""
+inverse find the inverse matrix of the given matrix.
+It uses the above determinant and adjoint functions to do so.
+"""
 def inverse(matrix):
     det = determinant(matrix)
 
@@ -116,6 +141,9 @@ def inverse(matrix):
             inverse[i][j] = adj[i][j]/float(det)
     return inverse
 
+"""
+constMult finds a scalar multiple of a given matrix
+"""
 def constMult(matrix, n):
     result = [[None] * len(matrix) for _ in range(len(matrix))]
     
@@ -124,6 +152,9 @@ def constMult(matrix, n):
             result[i][j] = matrix[i][j] * n
     return result
 
+"""
+matrixPower uses matrixMult from above to find a given matrix to a certain power n
+"""
 def matrixPower(matrix, power):
     if(power == 1):
         return matrix
@@ -136,6 +167,9 @@ def matrixPower(matrix, power):
 
     return powerMatrix
 
+"""
+toIdentity creates an identity matrix of a given size.
+"""
 def toIdentity(size):
     if(size == 1):
         return [1]
@@ -148,15 +182,25 @@ def toIdentity(size):
                 identity[i][j] = 1
     return identity
 
+"""
+toIdentityA sets A to an identity matrix of the same size.
+"""
 def toIdentityA(size):
     global aData
     aData = toIdentity(size)
     return
 
+"""
+toIdentityB does the same as prior but for B.
+"""
 def toIdentityB(size):
     global bData
     bData = toIdentity(size)
     return
+
+"""
+addMatrix adds two matrices element wise and returns result.
+"""
 
 def addMatrix(matrix1, matrix2):
     addedMat = [[0 for i in range(len(matrix1))] for j in range(len(matrix1))]
@@ -165,6 +209,10 @@ def addMatrix(matrix1, matrix2):
             addedMat[i][j] = matrix1[i][j] + matrix2[i][j]
     return addedMat
 
+"""
+submatrix subtracts two matrices element wise and returns result.
+"""
+
 def subMatrix(matrix1, matrix2):
     subbedMat = [[0 for i in range(len(matrix1))] for j in range(len(matrix1))]
     for i in range(len(matrix1)):
@@ -172,11 +220,19 @@ def subMatrix(matrix1, matrix2):
             subbedMat[i][j] = matrix1[i][j] - matrix2[i][j]
     return subbedMat
 
+"""
+copyAtoB copies A's data to B
+"""
+
 def copyAtoB():
     global aData
     global bData
     bData = aData
     return
+
+"""
+copyBtoA copies B's data to A
+"""
 
 def copyBtoA():
     global aData
@@ -184,6 +240,9 @@ def copyBtoA():
     aData = bData
     return
 
+"""
+swapAandB swaps the data between A and B
+"""
 def swapAandB():
     global aData
     global bData
@@ -236,8 +295,10 @@ while inp != 0:
                 aData = temp
                 print("A: ")
                 print(np.matrix(aData))
-        except:
+        except IOError:
             print("No A.csv file is in directory")
+        except TypeError:
+            print("You cannot have foreign symbols/an empty matrix. Matrix must be 1x1 - 10x10 and be made of integers")
     elif(inp == 2):
         try:
             temp = loadB()
@@ -247,8 +308,10 @@ while inp != 0:
                 bData = temp
                 print("B: ")
                 print(np.matrix(bData))
-        except:
+        except IOError:
             print("No A.csv file is in directory")
+        except TypeError:
+            print("You cannot have foreign symbols/an empty matrix. Matrix must be a 1x1 - 10x10 and be made of integers")
     elif(inp == 3):
         if('aData' in globals()):
             if(len(aData[0]) == len(aData)):
