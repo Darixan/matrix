@@ -21,6 +21,39 @@ def LoadB()
 end
 
 ###IDENTITY MATRIX HERE
+def toIdentity(n)
+    if n == 1
+        return [1]
+    end
+    
+    id = Array.new(n){Array.new(n)}
+
+    i = 0
+    j = 0
+
+    id.each do |idRow|
+        idRow.each do |idCol|
+            if i == j
+                id[i][j] = 1
+            else
+                id[i][j] = 0
+            end
+            j = j + 1
+        end
+        i = i + 1
+        j = 0
+    end
+    return id
+
+end
+
+def toIdentityA(size)
+    $matrixA = toIdentity(size)
+end
+
+def toIdentityB(size)
+    $matrixB = toIdentity(size)
+end
 
 ###SCALAR HERE 
 def constMult(matrix, const)
@@ -160,12 +193,40 @@ while true
         
         when 1
             $matrixA = LoadA()
-            print $matrixA
+            width = $matrixA.flatten.max.to_s.size+2
+            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
         
         when 2
             $matrixB = LoadB()
-            print $matrixB
-        
+            width = $matrixB.flatten.max.to_s.size+2
+            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+
+        when 3
+            matrixA = $matrixA
+            row = matrixA[0].length
+            col = matrixA.length
+            if row == col
+                toIdentityA(col)
+                puts "A is now: \n"
+                width = $matrixA.flatten.max.to_s.size+2
+                puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            else
+                puts "A is not a square matrix\n"
+            end
+
+        when 4
+            matrixB = $matrixB
+            row = matrixB[0].length
+            col = matrixB.length
+            if row == col
+                toIdentityB(col)
+                puts "B is now: \n"
+                width = $matrixB.flatten.max.to_s.size+2
+                puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            else
+                puts "B is not a square matrix\n"
+            end
+
         when 5
             puts "Please enter a value for 'n': \n"
             inp = Integer(gets) rescue false
@@ -174,7 +235,8 @@ while true
                 inp = Integer(gets) rescue false
             end
             $matrixC = constMult($matrixA, inp)
-            print $matrixC
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
             
             puts "Would you like to store the result of A? (Y/N)\n"
@@ -194,7 +256,8 @@ while true
                 inp = Integer(gets) rescue false
             end
             $matrixC = constMult($matrixB, inp)
-            print $matrixC
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
             
             puts "Would you like to store the result of B? (Y/N)\n"
@@ -209,48 +272,63 @@ while true
         
         when 13
             $matrixC = addMatrix($matrixA, $matrixB) 
-            print $matrixC
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
         
         when 14
             $matrixC = subMatrix($matrixB, $matrixA)
-            print $matrixC
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
         
         when 15
             $matrixC = subMatrix($matrixA, $matrixB)
-            print $matrixC
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
 
         when 18
             Copy_A_to_B()
             puts "Matrix A: \n"
-            print $matrixA
+            width = $matrixA.flatten.max.to_s.size+2
+            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
             puts "Matrix B: \n"
-            print $matrixB
+            width = $matrixB.flatten.max.to_s.size+2
+            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
 
         when 19
             Copy_B_to_A()
             puts "Matrix A: \n"
-            print $matrixA
+            width = $matrixA.flatten.max.to_s.size+2
+            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
             puts "Matrix B: \n"
-            print $matrixB
+            width = $matrixB.flatten.max.to_s.size+2
+            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
 
         when 20
             Swap()
             puts "Matrix A: \n"
-            print $matrixA
+            width = $matrixA.flatten.max.to_s.size+2
+            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
             puts "Matrix B: \n"
-            print $matrixB
+            width = $matrixB.flatten.max.to_s.size+2
+            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n" 
             
         when 21
-            print $matrixA
+            puts "Matrix A: \n"
+            width = $matrixA.flatten.max.to_s.size+2
+            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            puts "\n"
         when 22
-            print $matrixB
-        
+            puts "Matrix B: \n"
+            width = $matrixB.flatten.max.to_s.size+2
+            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            puts "\n"
+
         else
             puts "INVALID INPUT"
     end
