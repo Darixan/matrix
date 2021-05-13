@@ -134,15 +134,21 @@ def Adjoint(matrix)
 
     sign = 1
 
-    matrix.each do |mRow|
-        mRow.each do |mCol|
+    i = 0
+    j = 0
+
+    matrix.each do |mRowI|
+        matrix.each do |mRowJ|
             if (i+j)%2 == 0
                 sign = 1
             else
                 sign = -1
             end
-            adjoint[j][i] = sign * determinant(cofactor(matrix,i,j))
+            adjoint[j][i] = sign * Determinant(cofactor(matrix,i,j))
+            j = j + 1
         end
+        i = i + 1
+        j = 0
     end
     return adjoint
 end
@@ -151,10 +157,40 @@ def Inverse(matrix)
     determinant = Determinant(matrix)
 
     adjoint = Adjoint(matrix)
+    inverse = Array.new(matrix.length){Array.new(matrix.length)}
+    
+    i = 0
+    j = 0
+    
+    adjoint.each do |adjRowI|
+        adjoint.each do |adjRowJ|
+            inverse[i][j] = adjoint[i][j]/determinant.to_f
+            inverse[i][j] = inverse[i][j].round(4)
+            j = j + 1
+        end
+        i = i + 1
+        j = 0
+    end
+
+    return inverse
+
 end
 
-def Power()
+def Power(matrix, power)
+    if power == 1
+        return matrix
+    end
 
+    result = Array.new(matrix.length){Array.new(matrix.length)}
+    result = multMatrix(matrix, matrix)
+
+    i = 2
+    while i < power
+        result = multMatrix(matrix, result)
+        i = i + 1
+    end
+
+    return result
 end
 
 #binary operations
@@ -253,16 +289,18 @@ def Menu()
     puts "10\tTranspose B\n"
     puts "11\tInverse of A\n"
     puts "12\tInverse of B\n"
-    puts "13\tA + B\n"
-    puts "14\tB - A\n"
-    puts "15\tA - B\n"
-    puts "16\tA * B\n"
-    puts "17\tB * A\n"
-    puts "18\tB = A\n"
-    puts "19\tA = B\n"
-    puts "20\tSwap A and B\n"
-    puts "21\tPrint A\n"
-    puts "22\tPrint B\n"
+    puts "13\tA ^ n\n"
+    puts "14\tB ^ n\n"
+    puts "15\tA + B\n"
+    puts "16\tB - A\n"
+    puts "17\tA - B\n"
+    puts "18\tA * B\n"
+    puts "19\tB * A\n"
+    puts "20\tB = A\n"
+    puts "21\tA = B\n"
+    puts "22\tSwap A and B\n"
+    puts "23\tPrint A\n"
+    puts "24\tPrint B\n"
     puts "0\tQuit\n\n"
 end
 
@@ -398,23 +436,58 @@ while true
             else
                 puts "Matrix A must be a square matrix\n"
             end
+        
+        when 12
+            if $matrixB[0].length == $matrixB.length
+                $matrixC = Inverse($matrixB)
+                puts "The inverse matrix for Matrix B is: \n"
+                width = $matrixC.flatten.max.to_s.size+2
+                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+                puts "\n" 
+            else
+                puts "Matrix B must be a square matrix\n"
+            end
 
         when 13
+            puts "Please enter a value for the exponent value 'n': \n"
+            inp = Integer(gets) rescue false
+            while inp == false
+                puts "Please enter an INTEGER for 'n': \n"
+                inp = Integer(gets) rescue false
+            end
+            $matrixC = Power($matrixA, inp)
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            puts "\n"
+            
+        when 14
+            puts "Please enter a value for the exponent value 'n': \n"
+            inp = Integer(gets) rescue false
+            while inp == false
+                puts "Please enter an INTEGER for 'n': \n"
+                inp = Integer(gets) rescue false
+            end
+            $matrixC = Power($matrixB, inp)
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            puts "\n"
+        
+        when 15
             $matrixC = addMatrix($matrixA, $matrixB) 
             width = $matrixC.flatten.max.to_s.size+2
             puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
         
-        when 14
+        when 16
             $matrixC = subMatrix($matrixB, $matrixA)
             width = $matrixC.flatten.max.to_s.size+2
             puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
         
-        when 15
+        when 17
             $matrixC = subMatrix($matrixA, $matrixB)
             width = $matrixC.flatten.max.to_s.size+2
             puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
 
-        when 16
+        when 18
             if $matrixA[0].length == $matrixB.length
                 puts "A * B is: \n"
                 $matrixC = multMatrix($matrixA, $matrixB)
@@ -423,7 +496,7 @@ while true
             else
                 puts "Matrix A's column length must equal B's row length\n"
             end
-        when 17
+        when 19
             if $matrixB[0].length == $matrixA.length
                 puts "A * B is: \n"
                 $matrixC = multMatrix($matrixB, $matrixA)
@@ -433,7 +506,7 @@ while true
                 puts "Matrix B's column length must equal A's row length\n"
             end
 
-        when 18
+        when 20
             Copy_A_to_B()
             puts "Matrix A: \n"
             width = $matrixA.flatten.max.to_s.size+2
@@ -444,7 +517,7 @@ while true
             puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
 
-        when 19
+        when 21
             Copy_B_to_A()
             puts "Matrix A: \n"
             width = $matrixA.flatten.max.to_s.size+2
@@ -455,7 +528,7 @@ while true
             puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
 
-        when 20
+        when 22
             Swap()
             puts "Matrix A: \n"
             width = $matrixA.flatten.max.to_s.size+2
@@ -466,12 +539,12 @@ while true
             puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n" 
             
-        when 21
+        when 23
             puts "Matrix A: \n"
             width = $matrixA.flatten.max.to_s.size+2
             puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
             puts "\n"
-        when 22
+        when 24
             puts "Matrix B: \n"
             width = $matrixB.flatten.max.to_s.size+2
             puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
