@@ -268,16 +268,18 @@ while inp != 0:
     print("10. Transpose B")
     print("11. Inverse of A")
     print("12. Inverse of B")
-    print("13. A + B")
-    print("14. B - A")
-    print("15. A - B")
-    print("16. A * B")
-    print("17. B * A")
-    print("18. B = A")
-    print("19. A = B")
-    print("20. Swap A and B")
-    print("21. Print A")
-    print("22. Print B")
+    print("13. A ^ n")
+    print("14. B ^ n")
+    print("15. A + B")
+    print("16. B - A")
+    print("17. A - B")
+    print("18. A * B")
+    print("19. B * A")
+    print("20. B = A")
+    print("21. A = B")
+    print("22. Swap A and B")
+    print("23. Print A")
+    print("24. Print B")
     print("0. Exit Calculator")
     
     try:
@@ -289,8 +291,16 @@ while inp != 0:
     if(inp == 1):
         try:
             temp = loadA()
+            diffsize = False
+            
+            for i in range(len(temp)):
+                if len(temp[i]) != len(temp[0]):
+                    diffsize = True
+            
             if(len(temp) > 10 or len(temp[0]) > 10):
-                print("Can only load matrices up to size 10x10!")
+                print("Error: Can only load matrices up to size 10x10!")
+            elif(diffsize):
+                print("Error: Matrix has to be of the same size for each row!")
             else:
                 aData = temp
                 print("A: ")
@@ -298,12 +308,22 @@ while inp != 0:
         except IOError:
             print("No A.csv file is in directory")
         except TypeError:
-            print("You cannot have foreign symbols/an empty matrix. Matrix must be 1x1 - 10x10 and be made of integers")
+            print("You cannot have foreign symbols. Matrix must be 1x1 - 10x10 and be made of integers")
+        except IndexError:
+            print("The matrix cannot be an empty matrix!")
     elif(inp == 2):
         try:
             temp = loadB()
+            diffsize = False
+            
+            for i in range(len(temp)):
+                if len(temp[i]) != len(temp[0]):
+                    diffsize = True
+
             if(len(temp) > 10 or len(temp[0]) > 10):
                 print("Can only load matrices up to size 10x10!")
+            elif(diffsize):
+                print("Error: Matrix has to be of the same size for each row!")
             else:
                 bData = temp
                 print("B: ")
@@ -311,7 +331,9 @@ while inp != 0:
         except IOError:
             print("No A.csv file is in directory")
         except TypeError:
-            print("You cannot have foreign symbols/an empty matrix. Matrix must be a 1x1 - 10x10 and be made of integers")
+            print("You cannot have foreign symbols. Matrix must be a 1x1 - 10x10 and be made of integers")
+        except IndexError:
+            print("The matrix cannot be an empty matrix!")
     elif(inp == 3):
         if('aData' in globals()):
             if(len(aData[0]) == len(aData)):
@@ -413,6 +435,35 @@ while inp != 0:
         else:
             print("Matrix B does not exist, try loading it!")
     elif(inp == 13):
+        if('aData' in globals()):
+            if(len(aData) == len(aData[0])):
+                try:
+                    n = int(input("Please input a value for exponent n to power by: "))
+                    result = matrixPower(aData, n)
+                    print("Result: ")
+                    print(np.matrix(result))
+                except:
+                    print ("Please input a valid integer!")
+            else:
+                print("A must be a square matrix")
+        else:
+            print("Matrix A does not exist, try loading it!")
+    elif(inp == 14):
+        if('bData' in globals()):
+            if(len(bData) == len(bData[0])):
+                try:
+                    n = int(input("Please input a value for exponent n to power by: "))
+                    result = matrixPower(bData, n)
+                    print("Result: ")
+                    print(np.matrix(result))
+                except:
+                    print ("Please input a valid integer!")
+            else:
+                print("B must be a square matrix")
+        else:
+            print("Matrix B does not exist, try loading it!")
+
+    elif(inp == 15):
         if('aData' in globals()) and ('bData' in globals()):
             if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
                 result = addMatrix(aData, bData) 
@@ -422,7 +473,7 @@ while inp != 0:
                 print("A and B must be the same size.")
         else:
             print("Matrix A or B does not exist, try loading it!")
-    elif(inp == 14):
+    elif(inp == 16):
         if('aData' in globals()) and ('bData' in globals()):
             if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
                 result = subMatrix(bData, aData)
@@ -432,7 +483,7 @@ while inp != 0:
                 print("A and B must be the same size.")
         else:
             print("Matrix A or B does not exist, try loading it!")
-    elif(inp == 15):
+    elif(inp == 17):
         if('aData' in globals()) and ('bData' in globals()):
             if(len(aData[0]) == len(bData[0])) and (len(aData) == len(bData)):
                 result = subMatrix(aData, bData)
@@ -442,7 +493,7 @@ while inp != 0:
                 print("A and B must be the same size.")
         else:
             print("Matrix A or B does not exist, try loading it!")
-    elif(inp == 16):
+    elif(inp == 18):
         if('aData' in globals()) and ('bData' in globals()):
             if(len(aData[0]) == len(bData)):
                 result = matrixMult(aData, bData)
@@ -452,7 +503,7 @@ while inp != 0:
                 print("A's columns must equal B's rows!")
         else:
             print("Matrix A or B does not exist, try loading it!")
-    elif(inp == 17):
+    elif(inp == 19):
         if('aData' in globals()) and ('bData' in globals()):
             if(len(bData[0]) == len(aData)):
                 result = matrixMult(bData, aData)
@@ -462,32 +513,32 @@ while inp != 0:
                 print("B's columns must equal A's rows!")
         else:
             print("Matrix A or B does not exist, try loading it!")
-    elif(inp == 18):
+    elif(inp == 20):
         if('aData' in globals()):
             copyAtoB()
             print("B: ")
             print(np.matrix(bData))
         else:
             print("A matrix does not exist! Cannot copy to B!")
-    elif(inp == 19):
+    elif(inp == 21):
         if('bData' in globals()):
             copyBtoA()
             print("A: ")
             print(np.matrix(bData))
         else:
             print("B matrix does not exist! Cannot copy to A!")
-    elif(inp == 20):
+    elif(inp == 22):
         if('aData' in globals()) and ('bData' in globals()):
             swapAandB()
         else:
             print("Either A or B does not exist!")
-    elif(inp == 21):
+    elif(inp == 23):
         if('aData' in globals()):
             print("A matrix is: ")
             print(np.matrix(aData))
         else:
             print("Nothing in matrix A, try loading it!")
-    elif(inp == 22):
+    elif(inp == 24):
         if('bData' in globals()):
             print("B matrix is: ")
             print(np.matrix(bData))
