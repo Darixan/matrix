@@ -76,16 +76,81 @@ def constMult(matrix, const)
 
 end
 
-def Determinate(matrix)
+def cofactor(mat, i, j)
+    n = []
+    for row in mat[0,i]+mat[i+1, mat.length()] do
+      n.push(row[0,j]+row[j+1,row.length()])
+    end
+    return n
+end
+
+def Determinant(matrix)
+    if matrix.length == 2
+        determinant = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
+        return determinant
+    end
+
+    detSum = 0
+
+    i = 0
+    matrix[0].each do |mCol|
+        sign = (-1) ** (i)
+
+        subDet = Determinant(cofactor(matrix, 0, i))
+
+        detSum = (sign * matrix[0][i] * subDet) + detSum
+        i = i + 1
+    end
+    return detSum
+
 
 end
 
 def Transpose(matrix)
+    row = matrix[0].length
+    col = matrix.length
+    transposedMatrix = Array.new(col){Array.new(row)}
 
+    i = 0
+    j = 0
+    
+    transposedMatrix.each do |tRow|
+        tRow.each do |tCol|
+            transposedMatrix[i][j] = matrix[j][i]
+            j = j + 1
+        end
+        i = i + 1
+        j = 0
+    end
+    return transposedMatrix
+end
+
+def Adjoint(matrix)
+    adjoint = Array.new(matrix.length){Array.new(matrix.length)}
+    if matrix.length == 1
+        adjoint = [1]
+        return adjoint
+    end
+
+    sign = 1
+
+    matrix.each do |mRow|
+        mRow.each do |mCol|
+            if (i+j)%2 == 0
+                sign = 1
+            else
+                sign = -1
+            end
+            adjoint[j][i] = sign * determinant(cofactor(matrix,i,j))
+        end
+    end
+    return adjoint
 end
 
 def Inverse(matrix)
+    determinant = Determinant(matrix)
 
+    adjoint = Adjoint(matrix)
 end
 
 def Power()
@@ -135,7 +200,28 @@ def subMatrix(matrix1, matrix2)
 end
 
 def multMatrix(matrix1, matrix2)
+    row = matrix1.length
+    col = matrix2[0].length
+    matrix3 = Array.new(col){Array.new(row, 0)}
 
+    i = 0
+    j = 0
+    k = 0
+
+    matrix1.each do |m1Row|
+        m1Row.each do |m1Col|
+            matrix2.each do |m2Row|
+                matrix3[i][j] = (matrix1[i][k] * matrix2[k][j]) + matrix3[i][j]
+                k = k + 1
+            end
+            j = j + 1
+            k = 0
+        end
+        i = i + 1
+        j = 0
+    end
+    
+    return matrix3
 end
 
 def Copy_A_to_B()
@@ -269,7 +355,50 @@ while true
             if inp == "Y"
                 $matrixB = $matrixC
             end
+
+        when 7
+            if $matrixA[0].length == $matrixA.length
+                determinant = Determinant($matrixA)
+                puts "The determinant is: \n"
+                print determinant
+                puts "\n"
+            else
+                puts "Matrix A must be a square matrix\n"
+            end 
+       
+        when 8
+            if $matrixB[0].length == $matrixB.length
+                determinant = Determinant($matrixB)
+                puts "The determinant is: \n"
+                print determinant
+                puts "\n"
+            else
+                puts "Matrix B must be a square matrix\n"
+            end 
         
+        when 9
+            $matrixC = Transpose($matrixA)
+            puts "Transposed matrix: \n"
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+        
+        when 10
+            $matrixC = Transpose($matrixB)
+            puts "Transposed matrix: \n"
+            width = $matrixC.flatten.max.to_s.size+2
+            puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+
+        when 11
+            if $matrixA[0].length == $matrixA.length
+                $matrixC = Inverse($matrixA)
+                puts "The inverse matrix for Matrix A is: \n"
+                width = $matrixC.flatten.max.to_s.size+2
+                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+                puts "\n" 
+            else
+                puts "Matrix A must be a square matrix\n"
+            end
+
         when 13
             $matrixC = addMatrix($matrixA, $matrixB) 
             width = $matrixC.flatten.max.to_s.size+2
@@ -284,6 +413,25 @@ while true
             $matrixC = subMatrix($matrixA, $matrixB)
             width = $matrixC.flatten.max.to_s.size+2
             puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+
+        when 16
+            if $matrixA[0].length == $matrixB.length
+                puts "A * B is: \n"
+                $matrixC = multMatrix($matrixA, $matrixB)
+                width = $matrixC.flatten.max.to_s.size+2
+                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            else
+                puts "Matrix A's column length must equal B's row length\n"
+            end
+        when 17
+            if $matrixB[0].length == $matrixA.length
+                puts "A * B is: \n"
+                $matrixC = multMatrix($matrixB, $matrixA)
+                width = $matrixC.flatten.max.to_s.size+2
+                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            else
+                puts "Matrix B's column length must equal A's row length\n"
+            end
 
         when 18
             Copy_A_to_B()
