@@ -317,13 +317,49 @@ while true
         
         when 1
             $matrixA = LoadA()
-            width = $matrixA.flatten.max.to_s.size+2
-            puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
-        
+            
+            listIntegers = true
+            $matrixA.each do |mARow|
+                if listIntegers == false
+                    break
+                end
+                mARow.each do |mACol|
+                    if mACol.is_a? Integer
+                    else
+                      puts "ERROR: Matrix must only contain integers\n"
+                      listIntegers = false
+                      break
+                    end
+                end
+            end
+
+            if listIntegers == true
+                width = $matrixA.flatten.max.to_s.size+2
+                puts $matrixA.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            end
+
         when 2
             $matrixB = LoadB()
-            width = $matrixB.flatten.max.to_s.size+2
-            puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            
+            listIntegers = true
+            $matrixB.each do |mBRow|
+                if listIntegers == false
+                    break
+                end
+                mBRow.each do |mBCol|
+                    if mBCol.is_a? Integer
+                    else
+                      puts "ERROR: Matrix must only contain integers\n"
+                      listIntegers = false
+                      break
+                    end
+                end
+            end
+            
+            if listIntegers == true
+                width = $matrixB.flatten.max.to_s.size+2
+                puts $matrixB.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+            end
 
         when 3
             matrixA = $matrixA
