@@ -416,17 +416,18 @@ while inp != 0:
             print("Matrix B does not exist, try loading it!")
     elif(inp == 11):
         if('aData' in globals()):
-            if(len(aData[0]) == len(aData)):
+            if(len(aData[0]) == len(aData) and (determinant(aData) != 0)):
                 inv = inverse(aData)
                 print("The invere matrix for A is: ")
                 print(np.matrix(inv))
             else:
                 print("A must be a square matrix!")
+                print("A must have a non 0 determinant")
         else:
             print("Matrix A does not exist, try loading it!")
     elif(inp == 12):
         if('bData' in globals()):
-            if(len(bData[0]) == len(bData)):
+            if(len(bData[0]) == len(bData) and (determinant(bData) != 0)):
                 inv = inverse(bData)
                 print("The invere matrix for B is: ")
                 print(np.matrix(inv))
