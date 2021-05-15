@@ -13,11 +13,11 @@ require 'csv'
 
 #unary operations
 def LoadA()
-    file = CSV.parse(File.read("A.csv"), converters: :integer, headers: false)
+    file = CSV.parse(File.read("B1.csv"), converters: :integer, headers: false)
 end
 
 def LoadB()
-    file = CSV.parse(File.read("B.csv"), converters: :integer, headers: false)
+    file = CSV.parse(File.read("B2.csv"), converters: :integer, headers: false)
 end
 
 ###IDENTITY MATRIX HERE
@@ -464,22 +464,30 @@ while true
 
         when 11
             if $matrixA[0].length == $matrixA.length
-                $matrixC = Inverse($matrixA)
-                puts "The inverse matrix for Matrix A is: \n"
-                width = $matrixC.flatten.max.to_s.size+2
-                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
-                puts "\n" 
+                if Determinant($matrixA) != 0
+                    $matrixC = Inverse($matrixA)
+                    puts "The inverse matrix for Matrix A is: \n"
+                    width = $matrixC.flatten.max.to_s.size+2
+                    puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+                    puts "\n" 
+                else
+                    puts "Error: the determinant cannot be Zero\n"
+                end
             else
                 puts "Matrix A must be a square matrix\n"
             end
         
         when 12
             if $matrixB[0].length == $matrixB.length
-                $matrixC = Inverse($matrixB)
-                puts "The inverse matrix for Matrix B is: \n"
-                width = $matrixC.flatten.max.to_s.size+2
-                puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
-                puts "\n" 
+                if Determinant($matrixB) != 0
+                    $matrixC = Inverse($matrixB)
+                    puts "The inverse matrix for Matrix B is: \n"
+                    width = $matrixC.flatten.max.to_s.size+2
+                    puts $matrixC.map {|a| a.map {|i| i.to_s.rjust(width)}.join}
+                    puts "\n" 
+                else
+                    puts "Error: the determinant cannot be Zero\n"
+                end
             else
                 puts "Matrix B must be a square matrix\n"
             end
